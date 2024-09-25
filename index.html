@@ -6,113 +6,139 @@
     <title>Search Engine</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden; /* Disable body scrolling */
-        }
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4; /* Soft light gray */
+}
 
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            height: 100vh;
-        }
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 400px; /* Maximum width for the input area */
+    padding: 20px;
+    background: #ffffff; /* Bright white for container */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
 
-        .input-unit {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            width: 340px; /* Input container width */
-        }
+.input-unit {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* Space below the input unit */
+}
 
-        input[type="text"] {
-            padding: 5px;
-            margin-right: 10px;
-            flex-grow: 1;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            height: 30px; /* Match the height */
-        }
+input[type="text"] {
+    flex-grow: 1;
+    padding: 10px; /* Consistent padding */
+    border: 1px solid #ccc; /* Light gray border for a cleaner look */
+    border-radius: 5px; /* Slight rounding */
+    height: 40px; /* Consistent height */
+    font-size: 16px;
+    color: #333; /* Dark text for readability */
+    background-color: transparent; /* No background color */
+    margin-right: 10px; /* Space between input and button */
+}
 
-        .open-popup {
-            padding: 5px 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+.search-logo {
+    padding: 0; /* No padding for icon button */
+    background-color: transparent; /* No background color */
+    color: #3498db; /* Sky blue color for logo */
+    border: none;
+    border-radius: 5px; /* Slight rounding */
+    cursor: pointer;
+    width: 40px; /* Set a consistent width for the logo */
+    height: 40px; /* Consistent height */
+    transition: color 0.3s; /* Transition for hover effect */
+}
 
-        .search-logo {
-            width: 30px; /* Match the size of the input and list */
-            height: 30px; /* Match the size of the input and list */
-            cursor: pointer;
-        }
+.search-logo:hover {
+    color: #2980b9; /* Darker blue on hover */
+}
 
-        .fallback-icon {
-            font-size: 30px; /* Adjust size of fallback emoji */
-            cursor: pointer;
-            line-height: 30px; /* Center emoji vertically */
-        }
+.open-popup {
+    padding: 0; /* Remove padding for vertical centering */
+    height: 40px; /* Consistent height */
+    background-color: transparent; /* No background color */
+    color: #3498db; /* Sky blue */
+    border: 1px solid #3498db; /* Add border to the button */
+    border-radius: 5px; /* Slight rounding */
+    cursor: pointer;
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    transition: background-color 0.3s, color 0.3s; /* Transition for hover effect */
+    width: 100px; /* Set a consistent width for the button */
+}
 
-        .loading-gif {
-            display: none; /* Hidden by default */
-            width: 30px; /* Match size with other elements */
-            height: 30px; /* Match size with other elements */
-        }
+.open-popup:hover {
+    background-color: #2980b9; /* Darker blue background on hover */
+    color: white; /* Change text color on hover */
+}
 
-        /* Modal Styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+.loading-gif {
+    display: none;
+    width: 30px;
+    height: 30px;
+}
 
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
-        }
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
 
-        .modal-header {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
+.modal-content {
+    background-color: #ffffff; /* Bright white for modal */
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+}
 
-        .list {
-            text-align: left;
-        }
+.modal-header {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333; /* Dark text for readability */
+}
 
-        .list ul {
-            list-style-type: none;
-            padding: 0;
-        }
+.list {
+    text-align: left;
+}
 
-        .list li {
-            margin: 10px 0;
-        }
+.list ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-        .close-btn {
-            padding: 5px 10px;
-            background-color: #28A745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+.list li {
+    margin: 8px 0; /* Reduced margin for a tighter look */
+    color: #333; /* Dark text for readability */
+}
+
+.close-btn {
+    padding: 10px;
+    background-color: #2ecc71; /* Fresh green for close button */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Slight rounding */
+    cursor: pointer;
+    width: 100%; /* Full width for the close button */
+}
+
+.close-btn:hover {
+    background-color: #27ae60; /* Darker green on hover */
+}
 
     </style>
 </head>
@@ -121,7 +147,7 @@
     <div class="container">
         <div class="input-unit">
             <input type="text" id="searchInput" placeholder="Type here..." />
-            <button class="open-popup" onclick="openPopup()">Select Engines</button>
+            <button class="open-popup" onclick="openPopup()">Select Engine</button>
             <img src="https://s1.gifyu.com/images/SA6W6.png" alt="Search" class="search-logo" id="searchLogo" onclick="openSearch()" onerror="this.style.display='none'; document.getElementById('fallbackIcon').style.display='inline';">
             <span id="fallbackIcon" class="fallback-icon" style="display:none;" onclick="openSearch()">🔍</span>
             <img src="https://i.pinimg.com/originals/8a/c1/29/8ac12962c05648c55ca85771f4a69b2d.gif" alt="Loading" class="loading-gif" id="loadingGif">
@@ -131,17 +157,17 @@
     <!-- Modal Popup -->
     <div class="modal" id="popupModal">
         <div class="modal-content">
-            <div class="modal-header">Select Search Engines</div>
+            <div class="modal-header">Select Search Engine</div>
             <div class="list">
                 <ul id="list">
-                    <li><input type="checkbox" value="DuckDuckGo"> DuckDuckGo</li>
-                    <li><input type="checkbox" value="SearX"> SearX</li>
-                    <li><input type="checkbox" value="Gibiru"> Gibiru</li>
-                    <li><input type="checkbox" value="Swisscows"> Swisscows</li>
-                    <li><input type="checkbox" value="Becovi"> Becovi</li>
-                    <li><input type="checkbox" value="Ecosia"> Ecosia</li>
-                    <li><input type="checkbox" value="Twitter"> Twitter</li>
-                    <li><input type="checkbox" value="Google"> Google</li>
+                    <li><input type="radio" name="searchEngine" value="DuckDuckGo"> DuckDuckGo</li>
+                    <li><input type="radio" name="searchEngine" value="SearX"> SearX</li>
+                    <li><input type="radio" name="searchEngine" value="Gibiru"> Gibiru</li>
+                    <li><input type="radio" name="searchEngine" value="Swisscows"> Swisscows</li>
+                    <li><input type="radio" name="searchEngine" value="Becovi"> Becovi</li>
+                    <li><input type="radio" name="searchEngine" value="Ecosia"> Ecosia</li>
+                    <li><input type="radio" name="searchEngine" value="Twitter"> Twitter</li>
+                    <li><input type="radio" name="searchEngine" value="Google"> Google</li>
                 </ul>
             </div>
             <button class="close-btn" onclick="closePopup()">Confirm Selection</button>
@@ -167,18 +193,21 @@
         // Function to open the search URL based on the selected options
         function openSearch() {
             const inputText = searchInput.value || "👍"; // Default to 👍 if input is empty
-            const checkboxes = document.querySelectorAll('#list input[type="checkbox"]:checked');
-            const selectedEngines = Array.from(checkboxes).map(checkbox => checkbox.value);
+            const selectedEngine = document.querySelector('#list input[type="radio"]:checked');
+            if (!selectedEngine) {
+                alert('Please select a search engine.'); // Alert if no engine is selected
+                return;
+            }
 
-            // Define URLs for each search engine
+            const engineName = selectedEngine.value;
             const engineUrls = {
-                "DuckDuckGo": `https://duckduckgo.com/?q=${encodeURIComponent(inputText)}&t=h_&ia=web`,
-                "SearX": `https://searx.org/search?q=${encodeURIComponent(inputText)}&language=all&time_range=&safesearch=0&theme=simple`,
+                "DuckDuckGo": `https://duckduckgo.com/?q=${encodeURIComponent(inputText)}`,
+                "SearX": `https://searx.org/search?q=${encodeURIComponent(inputText)}`,
                 "Gibiru": `https://gibiru.com/results.html?q=${encodeURIComponent(inputText)}`,
                 "Swisscows": `https://swisscows.com/en/web?query=${encodeURIComponent(inputText)}`,
                 "Becovi": `https://search.becovi.com/serp.php?q=${encodeURIComponent(inputText)}`,
-                "Ecosia": `https://www.ecosia.org/search?method=index&q=${encodeURIComponent(inputText)}`,
-                "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}&src=typed_query`,
+                "Ecosia": `https://www.ecosia.org/search?q=${encodeURIComponent(inputText)}`,
+                "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}`,
                 "Google": `https://www.google.com/search?q=${encodeURIComponent(inputText)}`
             };
 
@@ -186,15 +215,12 @@
             searchLogo.style.display = 'none';
             loadingGif.style.display = 'inline';
 
-            // Open the selected search engines in new tabs
+            // Open the selected search engine in a new tab
             setTimeout(() => {
-                selectedEngines.forEach(engine => {
-                    window.open(engineUrls[engine], '_blank');
-                });
-
-                loadingGif.style.display = 'none'; // Hide GIF after opening
-                searchLogo.style.display = 'inline'; // Show search logo again
-            }, 1000); // Adjust delay as needed (1 second)
+                window.open(engineUrls[engineName], '_blank');
+                loadingGif.style.display = 'none';
+                searchLogo.style.display = 'inline';
+            }, 1000);
         }
     </script>
 
