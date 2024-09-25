@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden; /* Disable body scrolling */
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .input-unit {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            width: 340px; /* Input container width */
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            margin-right: 10px;
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 30px; /* Match the height */
+        }
+
+        .open-popup {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-logo {
+            width: 30px; /* Match the size of the input and list */
+            height: 30px; /* Match the size of the input and list */
+            cursor: pointer;
+        }
+
+        .fallback-icon {
+            font-size: 30px; /* Adjust size of fallback emoji */
+            cursor: pointer;
+            line-height: 30px; /* Center emoji vertically */
+        }
+
+        .loading-gif {
+            display: none; /* Hidden by default */
+            width: 30px; /* Match size with other elements */
+            height: 30px; /* Match size with other elements */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .list {
+            text-align: left;
+        }
+
+        .list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .list li {
+            margin: 10px 0;
+        }
+
+        .close-btn {
+            padding: 5px 10px;
+            background-color: #28A745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="input-unit">
+            <input type="text" id="searchInput" placeholder="Type here..." />
+            <button class="open-popup" onclick="openPopup()">Select Engines</button>
+            <img src="https://s1.gifyu.com/images/SA6W6.png" alt="Search" class="search-logo" id="searchLogo" onclick="openSearch()" onerror="this.style.display='none'; document.getElementById('fallbackIcon').style.display='inline';">
+            <span id="fallbackIcon" class="fallback-icon" style="display:none;" onclick="openSearch()">🔍</span>
+            <img src="https://i.pinimg.com/originals/8a/c1/29/8ac12962c05648c55ca85771f4a69b2d.gif" alt="Loading" class="loading-gif" id="loadingGif">
+        </div>
+    </div>
+
+    <!-- Modal Popup -->
+    <div class="modal" id="popupModal">
+        <div class="modal-content">
+            <div class="modal-header">Select Search Engines</div>
+            <div class="list">
+                <ul id="list">
+                    <li><input type="checkbox" value="DuckDuckGo"> DuckDuckGo</li>
+                    <li><input type="checkbox" value="SearX"> SearX</li>
+                    <li><input type="checkbox" value="Gibiru"> Gibiru</li>
+                    <li><input type="checkbox" value="Swisscows"> Swisscows</li>
+                    <li><input type="checkbox" value="Becovi"> Becovi</li>
+                    <li><input type="checkbox" value="Ecosia"> Ecosia</li>
+                    <li><input type="checkbox" value="Twitter"> Twitter</li>
+                    <li><input type="checkbox" value="Google"> Google</li>
+                </ul>
+            </div>
+            <button class="close-btn" onclick="closePopup()">Confirm Selection</button>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const loadingGif = document.getElementById('loadingGif');
+        const searchLogo = document.getElementById('searchLogo');
+        const popupModal = document.getElementById('popupModal');
+
+        // Function to open the modal popup
+        function openPopup() {
+            popupModal.style.display = 'flex';
+        }
+
+        // Function to close the modal popup
+        function closePopup() {
+            popupModal.style.display = 'none';
+        }
+
+        // Function to open the search URL based on the selected options
+        function openSearch() {
+            const inputText = searchInput.value || "👍"; // Default to 👍 if input is empty
+            const checkboxes = document.querySelectorAll('#list input[type="checkbox"]:checked');
+            const selectedEngines = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+            // Define URLs for each search engine
+            const engineUrls = {
+                "DuckDuckGo": `https://duckduckgo.com/?q=${encodeURIComponent(inputText)}&t=h_&ia=web`,
+                "SearX": `https://searx.org/search?q=${encodeURIComponent(inputText)}&language=all&time_range=&safesearch=0&theme=simple`,
+                "Gibiru": `https://gibiru.com/results.html?q=${encodeURIComponent(inputText)}`,
+                "Swisscows": `https://swisscows.com/en/web?query=${encodeURIComponent(inputText)}`,
+                "Becovi": `https://search.becovi.com/serp.php?q=${encodeURIComponent(inputText)}`,
+                "Ecosia": `https://www.ecosia.org/search?method=index&q=${encodeURIComponent(inputText)}`,
+                "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}&src=typed_query`,
+                "Google": `https://www.google.com/search?q=${encodeURIComponent(inputText)}`
+            };
+
+            // Hide the search logo and show the loading GIF
+            searchLogo.style.display = 'none';
+            loadingGif.style.display = 'inline';
+
+            // Open the selected search engines in new tabs
+            setTimeout(() => {
+                selectedEngines.forEach(engine => {
+                    window.open(engineUrls[engine], '_blank');
+                });
+
+                loadingGif.style.display = 'none'; // Hide GIF after opening
+                searchLogo.style.display = 'inline'; // Show search logo again
+            }, 1000); // Adjust delay as needed (1 second)
+        }
+    </script>
+
+</body>
+</html>
