@@ -13,70 +13,65 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f4f4f4; /* Soft light gray */
+            background-color: #f4f4f4;
         }
         .container {
             text-align: center;
             width: 100%;
-            max-width: 400px; /* Maximum width for the input area */
+            max-width: 450px;
             padding: 20px;
-            background: #ffffff; /* Bright white for container */
-            border-radius: 5px; /* Rounded corners */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            background: #ffffff;
+            border-radius: 40px;
+            border: 2px solid #00ffff; /* Cyan border */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .input-unit {
             display: flex;
             align-items: center;
-            margin-bottom: 15px; /* Space below the input unit */
+            justify-content: space-between;
+            border-radius: 30px;
+            padding: 10px;
+            border: 1px solid #00ffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         input[type="text"] {
             flex-grow: 1;
-            padding: 10px; /* Consistent padding */
-            border: 1px solid #ccc; /* Light gray border for a cleaner look */
-            border-radius: 5px; /* Slight rounding */
-            height: 40px; /* Consistent height */
-            font-size: 16px;
-            color: #333; /* Dark text for readability */
-            background-color: transparent; /* No background color */
-            margin-right: 10px; /* Space between input and button */
-        }
-        .search-logo {
-            padding: 0; /* No padding for icon button */
-            background-color: transparent; /* No background color */
-            color: #3498db; /* Sky blue color for logo */
+            padding: 10px;
             border: none;
-            border-radius: 5px; /* Slight rounding */
-            cursor: pointer;
-            width: 40px; /* Set a consistent width for the logo */
-            height: 40px; /* Consistent height */
-            transition: color 0.3s; /* Transition for hover effect */
-        }
-        .search-logo:hover {
-            color: #2980b9; /* Darker blue on hover */
+            border-radius: 30px;
+            height: 40px;
+            font-size: 16px;
+            background-color: #f8faff; /* Light blue background */
+            color: #333;
         }
         .open-popup {
-            padding: 0; /* Remove padding for vertical centering */
-            height: 40px; /* Consistent height */
-            background-color: transparent; /* No background color */
-            color: #3498db; /* Sky blue */
-            border: 1px solid #3498db; /* Add border to the button */
-            border-radius: 5px; /* Slight rounding */
+            padding: 5px 15px;
+            border: 2px solid #00ffff;
+            border-radius: 30px;
+            background-color: transparent;
+            color: #00ffff;
+            font-size: 16px;
             cursor: pointer;
-            display: flex; /* Use flexbox for centering */
-            align-items: center; /* Center vertically */
-            justify-content: center; /* Center horizontally */
-            transition: background-color 0.3s, color 0.3s; /* Transition for hover effect */
-            width: 100px; /* Set a consistent width for the button */
+            transition: background-color 0.3s, color 0.3s;
         }
         .open-popup:hover {
-            background-color: #2980b9; /* Darker blue background on hover */
-            color: white; /* Change text color on hover */
+            background-color: #00ffff;
+            color: white;
+        }
+        .search-logo {
+            padding: 0;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
         }
         .loading-gif {
             display: none;
             width: 30px;
             height: 30px;
         }
+        /* Modal styling */
         .modal {
             display: none;
             position: fixed;
@@ -89,16 +84,16 @@
             align-items: center;
         }
         .modal-content {
-            background-color: #ffffff; /* Bright white for modal */
+            background-color: #ffffff;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 10px;
             width: 300px;
             text-align: center;
         }
         .modal-header {
             font-size: 18px;
             margin-bottom: 10px;
-            color: #333; /* Dark text for readability */
+            color: #333;
         }
         .list {
             text-align: left;
@@ -108,20 +103,20 @@
             padding: 0;
         }
         .list li {
-            margin: 8px 0; /* Reduced margin for a tighter look */
-            color: #333; /* Dark text for readability */
+            margin: 8px 0;
+            color: #333;
         }
         .close-btn {
             padding: 10px;
-            background-color: #2ecc71; /* Fresh green for close button */
+            background-color: #2ecc71;
             color: white;
             border: none;
-            border-radius: 5px; /* Slight rounding */
+            border-radius: 5px;
             cursor: pointer;
-            width: 100%; /* Full width for the close button */
+            width: 100%;
         }
         .close-btn:hover {
-            background-color: #27ae60; /* Darker green on hover */
+            background-color: #27ae60;
         }
     </style>
 </head>
@@ -151,6 +146,11 @@
                     <li><input type="radio" name="searchEngine" value="Twitter"> Twitter</li>
                     <li><input type="radio" name="searchEngine" value="Google"> Google</li>
                     <li><input type="radio" name="searchEngine" value="Bing"> Bing</li> <!-- Added Bing option -->
+                    <li><input type="radio" name="searchEngine" value="Startpage"> Startpage</li>
+                    <li><input type="radio" name="searchEngine" value="Privacia"> Privacia</li>
+                    <li><input type="radio" name="searchEngine" value="Mojeek"> Mojeek</li>
+                    <li><input type="radio" name="searchEngine" value="Torry"> Torry</li>
+                    <li><input type="radio" name="searchEngine" value="EntireWeb"> EntireWeb</li>
                 </ul>
             </div>
             <button class="close-btn" onclick="closePopup()">Confirm Selection</button>
@@ -192,9 +192,14 @@
                 "Ecosia": `https://www.ecosia.org/search?q=${encodeURIComponent(inputText)}`,
                 "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}`,
                 "Google": `https://www.google.com/search?q=${encodeURIComponent(inputText)}`,
-                "Bing": `https://www.bing.com/search?q=${encodeURIComponent(inputText)}` // Added Bing
+                "Bing": `https://www.bing.com/search?q=${encodeURIComponent(inputText)}`,
+                "Startpage": `https://www.startpage.com/do/search?query=${encodeURIComponent(inputText)}`,
+                "Privacia": `https://privacia.org/search?engine=1&q=${encodeURIComponent(inputText)}`,
+                "Mojeek": `https://www.mojeek.com/search?q=${encodeURIComponent(inputText)}`,
+                "Torry": `https://www.torry.io/search/?q=${encodeURIComponent(inputText)}`,
+                "EntireWeb": `https://search.entireweb.com/search?q=${encodeURIComponent(inputText)}`
             };
-
+         
             // Hide the search logo and show the loading GIF
             searchLogo.style.display = 'none';
             loadingGif.style.display = 'inline';
