@@ -4,7 +4,7 @@
 *many engine options*
 
 **How to use:**
-1. open the [page](https://alvinthemax.github.io/multi-image-viewer)
+1. open the [page](https://alvinthemax.github.io/search-engine/)
 2. type something
 3. select engine options
 4. press the search icon
