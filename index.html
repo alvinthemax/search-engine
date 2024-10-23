@@ -191,59 +191,69 @@ input[type="text"] {
     </div>
 
     <script>
-        const searchInput = document.getElementById('searchInput');
-        const loadingGif = document.getElementById('loadingGif');
-        const searchLogo = document.getElementById('searchLogo');
-        const popupModal = document.getElementById('popupModal');
+    const searchInput = document.getElementById('searchInput');
+    const loadingGif = document.getElementById('loadingGif');
+    const searchLogo = document.getElementById('searchLogo');
+    const popupModal = document.getElementById('popupModal');
 
-        // Function to open the modal popup
-        function openPopup() {
-            popupModal.style.display = 'flex';
+    // Function to open the modal popup
+    function openPopup() {
+        popupModal.style.display = 'flex';
+    }
+
+    // Function to close the modal popup
+    function closePopup() {
+        popupModal.style.display = 'none';
+    }
+
+    // Function to open the search URL or direct link
+    function openSearch() {
+        const inputText = searchInput.value || "👍"; // Default to 👍 if input is empty
+        const selectedEngine = document.querySelector('#list input[type="radio"]:checked');
+
+        // Check if the input contains a URL (http://, https:// or www.)
+        const urlPattern = /^(https?:\/\/|www\.)/;  // Added http:// to the regex
+        if (urlPattern.test(inputText)) {
+            // Open the input URL directly in a new tab
+            const url = inputText.startsWith('http') ? inputText : 'https://' + inputText;
+            window.open(url, '_blank');
+            return;
         }
 
-        // Function to close the modal popup
-        function closePopup() {
-            popupModal.style.display = 'none';
+        if (!selectedEngine) {
+            alert('Please select a search engine.'); // Alert if no engine is selected
+            return;
         }
 
-        // Function to open the search URL based on the selected options
-        function openSearch() {
-            const inputText = searchInput.value || "👍"; // Default to 👍 if input is empty
-            const selectedEngine = document.querySelector('#list input[type="radio"]:checked');
-            if (!selectedEngine) {
-                alert('Please select a search engine.'); // Alert if no engine is selected
-                return;
-            }
+        const engineName = selectedEngine.value;
+        const engineUrls = {
+            "DuckDuckGo": `https://duckduckgo.com/?q=${encodeURIComponent(inputText)}`,
+            "SearX": `https://searx.org/search?q=${encodeURIComponent(inputText)}&language=all&time_range=&safesearch=0&theme=simple`,
+            "Gibiru": `https://gibiru.com/results.html?q=${encodeURIComponent(inputText)}`,
+            "Swisscows": `https://swisscows.com/en/web?query=${encodeURIComponent(inputText)}`,
+            "Becovi": `https://search.becovi.com/serp.php?q=${encodeURIComponent(inputText)}`,
+            "Ecosia": `https://www.ecosia.org/search?q=${encodeURIComponent(inputText)}`,
+            "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}`,
+            "Google": `https://www.google.com/search?q=${encodeURIComponent(inputText)}`,
+            "Bing": `https://www.bing.com/search?q=${encodeURIComponent(inputText)}`,
+            "Startpage": `https://www.startpage.com/do/search?query=${encodeURIComponent(inputText)}`,
+            "Privacia": `https://privacia.org/search?engine=1&q=${encodeURIComponent(inputText)}`,
+            "Mojeek": `https://www.mojeek.com/search?q=${encodeURIComponent(inputText)}`,
+            "Torry": `https://www.torry.io/search/?q=${encodeURIComponent(inputText)}`,
+            "EntireWeb": `https://search.entireweb.com/search?q=${encodeURIComponent(inputText)}`
+        };
 
-            const engineName = selectedEngine.value;
-            const engineUrls = {
-                "DuckDuckGo": `https://duckduckgo.com/?q=${encodeURIComponent(inputText)}`,
-                "SearX": `https://searx.org/search?q=${encodeURIComponent(inputText)}&language=all&time_range=&safesearch=0&theme=simple`,
-                "Gibiru": `https://gibiru.com/results.html?q=${encodeURIComponent(inputText)}`,
-                "Swisscows": `https://swisscows.com/en/web?query=${encodeURIComponent(inputText)}`,
-                "Becovi": `https://search.becovi.com/serp.php?q=${encodeURIComponent(inputText)}`,
-                "Ecosia": `https://www.ecosia.org/search?q=${encodeURIComponent(inputText)}`,
-                "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}`,
-                "Google": `https://www.google.com/search?q=${encodeURIComponent(inputText)}`,
-                "Bing": `https://www.bing.com/search?q=${encodeURIComponent(inputText)}`,
-                "Startpage": `https://www.startpage.com/do/search?query=${encodeURIComponent(inputText)}`,
-                "Privacia": `https://privacia.org/search?engine=1&q=${encodeURIComponent(inputText)}`,
-                "Mojeek": `https://www.mojeek.com/search?q=${encodeURIComponent(inputText)}`,
-                "Torry": `https://www.torry.io/search/?q=${encodeURIComponent(inputText)}`,
-                "EntireWeb": `https://search.entireweb.com/search?q=${encodeURIComponent(inputText)}`
-            };
-         
-            // Hide the search logo and show the loading GIF
-            searchLogo.style.display = 'none';
-            loadingGif.style.display = 'inline';
+        // Hide the search logo and show the loading GIF
+        searchLogo.style.display = 'none';
+        loadingGif.style.display = 'inline';
 
-            // Open the selected search engine in a new tab
-            setTimeout(() => {
-                window.open(engineUrls[engineName], '_blank');
-                loadingGif.style.display = 'none';
-                searchLogo.style.display = 'inline';
-            }, 1000);
-        }
-    </script>
+        // Open the selected search engine in a new tab
+        setTimeout(() => {
+            window.open(engineUrls[engineName], '_blank');
+            loadingGif.style.display = 'none';
+            searchLogo.style.display = 'inline';
+        }, 1000);
+    }
+</script>
 </body>
 </html>
