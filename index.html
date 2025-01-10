@@ -2,165 +2,222 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>Search Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Search Engine</title>
     <style>
-        * {
-    box-sizing: border-box; /* Mengatur box sizing */
-}
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0d0d0d;
+            color: #00ff99;
+            flex-direction: column;
+        }
+        .input-unit {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            padding: 0;
+            background: #1a1a1a;
+            border-radius: 30px;
+            border: 2px solid #00ff99;
+            box-shadow: 0 0 15px #00ff99;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            height: 40px;
+            font-size: 16px;
+            background-color: #262626;
+            color: #00ff99;
+        }
+        .open-popup {
+            padding: 5px 15px;
+            border: 2px solid #00ff99;
+            border-radius: 0 30px 30px 0;
+            background-color: transparent;
+            color: #00ff99;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .open-popup:hover {
+            background-color: #00ff99;
+            color: #0d0d0d;
+        }
+        .search-logo {
+            padding: 5px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+        }
+        .loading-gif {
+            display: none;
+            width: 30px;
+            height: 30px;
+        }
+        /* History Section */
+        .history {
+            width: 100%;
+            max-width: 600px;
+            background: #262626;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow-y: auto;
+            max-height: 200px;
+            display: none;
+        }
+        .history-item {
+            background-color: #1a1a1a;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #00ff99;
+        }
+        .history-item:hover {
+            background-color: #333;
+        }
+        .copy-icon {
+            cursor: pointer;
+            font-size: 18px;
+            color: #00ff99;
+        }
+        .copy-icon:hover {
+            color: #0d0d0d;
+            background-color: #00ff99;
+            padding: 3px;
+            border-radius: 50%;
+        }
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            color: #00ff99;
+            max-height: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            font-size: 18px;
+            margin-bottom: 10px;
+            background-color: #0d0d0d;
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        .list {
+            text-align: left;
+            overflow-y: auto;
+        }
+        .list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .list li {
+            margin: 8px 0;
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .list li:hover {
+            background-image: url('https://i.ibb.co/hshhCY0/removed-background-1.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right;
+        }
+        .list li.selected {
+            background-image: none;
+        }
+        .list li.selected::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-image: url('https://i.ibb.co/hshhCY0/removed-background-1.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .close-btn {
+            padding: 10px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            position: sticky;
+            bottom: 0;
+            z-index: 1;
+        }
+        .close-btn:hover {
+            background-color: #27ae60;
+        }
 
-/* Body styling */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f4f4f4;
-}
+        /* Styling untuk tombol panah kebawah */
+        .toggle-history {
+            background-color: transparent;
+            border: none;
+            color: #00ff99;
+            font-size: 24px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: color 0.3s;
+        }
 
-/* Container */
-.container {
-    text-align: center;
-    width: 100%; /* Mengatur lebar penuh */
-    max-width: 450px; /* Membatasi lebar maksimum */
-    padding: 20px;
-    border-radius: 40px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Input Unit */
-.input-unit {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Ubah ke flex-start untuk menyusun elemen ke kiri */
-    border-radius: 30px;
-    padding: 10px;
-    border: 1px solid #000000; /* Warna hitam */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Memastikan input-unit mengisi lebar kontainer */
-}
-
-/* Input Text */
-input[type="text"] {
-    flex-grow: 1; /* Membuat input tumbuh */
-    flex-basis: 0; /* Memastikan input tidak mengambil ruang lebih dari yang diperlukan */
-    max-width: 60%; /* Mengurangi batas maksimum lebar input */
-    padding: 10px;
-    border: none;
-    border-radius: 30px;
-    height: 40px;
-    font-size: 16px;
-    background-color: #f8faff; /* Latar belakang tetap */
-    color: #333;
-    margin-right: 10px; /* Memberikan jarak antara input dan tombol */
-}
-
-/* Open Popup Button */
-.open-popup {
-    padding: 5px 15px;
-    border: 2px solid #000000; /* Ubah warna border menjadi hitam */
-    border-radius: 30px;
-    background-color: transparent;
-    color: #000000; /* Ubah warna teks menjadi hitam */
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.open-popup:hover {
-    background-color: #000000; /* Ubah warna hover menjadi hitam */
-    color: white;
-}
-
-/* Search Logo */
-.search-logo {
-    padding: 0;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-}
-
-/* Loading GIF */
-.loading-gif {
-    display: none;
-    width: 30px;
-    height: 30px;
-}
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-/* Modal Content */
-.modal-content {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-}
-
-/* Modal Header */
-.modal-header {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-/* List */
-.list {
-    text-align: left;
-}
-
-.list ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.list li {
-    margin: 8px 0;
-    color: #333;
-}
-
-/* Close Button */
-.close-btn {
-    padding: 10px;
-    background-color: #2ecc71;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-}
-
-.close-btn:hover {
-    background-color: #27ae60;
-}
-
+        .toggle-history:hover {
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="input-unit">
-            <input type="text" id="searchInput" placeholder="Type here..." />
-            <button class="open-popup" onclick="openPopup()">Select Engine</button>
-            <img src="https://s1.gifyu.com/images/SA6W6.png" alt="Search" class="search-logo" id="searchLogo" onclick="openSearch()" onerror="this.style.display='none'; document.getElementById('fallbackIcon').style.display='inline';">
-            <span id="fallbackIcon" class="fallback-icon" style="display:none;" onclick="openSearch()">🔍</span>
-            <img src="https://i.pinimg.com/originals/8a/c1/29/8ac12962c05648c55ca85771f4a69b2d.gif" alt="Loading" class="loading-gif" id="loadingGif">
+    <div class="input-unit">
+        <input type="text" id="searchInput" placeholder="Type here..." />
+        <button class="open-popup" onclick="openPopup()" id="engineButton">Select Engine</button>
+        <img src="https://i.ibb.co/YNC398f/removed-background.png" alt="Search" class="search-logo" id="searchLogo" onclick="openSearch()" onerror="this.style.display='none'; document.getElementById('fallbackIcon').style.display='inline';">
+        <span id="fallbackIcon" class="fallback-icon" style="display:none;" onclick="openSearch()">🔍</span>
+        <img src="https://media.tenor.com/wpSo-8CrXqUAAAAi/loading-loading-forever.gif" alt="Loading" class="loading-gif" id="loadingGif">
+    </div>
+
+    <!-- Tombol Panah Kebawah untuk membuka/menutup history -->
+    <button class="toggle-history" onclick="toggleHistory()">History ...</button>
+
+    <!-- History Section -->
+    <div class="history" id="historySection">
+        <div class="history-item">
+            No history yet.
         </div>
     </div>
 
@@ -170,20 +227,20 @@ input[type="text"] {
             <div class="modal-header">Select Search Engine</div>
             <div class="list">
                 <ul id="list">
-                    <li><input type="radio" name="searchEngine" value="DuckDuckGo"> DuckDuckGo</li>
-                    <li><input type="radio" name="searchEngine" value="SearX"> SearX</li>
-                    <li><input type="radio" name="searchEngine" value="Gibiru"> Gibiru</li>
-                    <li><input type="radio" name="searchEngine" value="Swisscows"> Swisscows</li>
-                    <li><input type="radio" name="searchEngine" value="Becovi"> Becovi</li>
-                    <li><input type="radio" name="searchEngine" value="Ecosia"> Ecosia</li>
-                    <li><input type="radio" name="searchEngine" value="Twitter"> Twitter</li>
-                    <li><input type="radio" name="searchEngine" value="Google"> Google</li>
-                    <li><input type="radio" name="searchEngine" value="Bing"> Bing</li> <!-- Added Bing option -->
-                    <li><input type="radio" name="searchEngine" value="Startpage"> Startpage</li>
-                    <li><input type="radio" name="searchEngine" value="Privacia"> Privacia</li>
-                    <li><input type="radio" name="searchEngine" value="Mojeek"> Mojeek</li>
-                    <li><input type="radio" name="searchEngine" value="Torry"> Torry</li>
-                    <li><input type="radio" name="searchEngine" value="EntireWeb"> EntireWeb</li>
+                    <li onclick="selectEngine(this)" data-value="DuckDuckGo">DuckDuckGo</li>
+                    <li onclick="selectEngine(this)" data-value="SearX">SearX</li>
+                    <li onclick="selectEngine(this)" data-value="Gibiru">Gibiru</li>
+                    <li onclick="selectEngine(this)" data-value="Swisscows">Swisscows</li>
+                    <li onclick="selectEngine(this)" data-value="Becovi">Becovi</li>
+                    <li onclick="selectEngine(this)" data-value="Ecosia">Ecosia</li>
+                    <li onclick="selectEngine(this)" data-value="Twitter">Twitter</li>
+                    <li onclick="selectEngine(this)" data-value="Google">Google</li>
+                    <li onclick="selectEngine(this)" data-value="Bing">Bing</li>
+                    <li onclick="selectEngine(this)" data-value="Startpage">Startpage</li>
+                    <li onclick="selectEngine(this)" data-value="Privacia">Privacia</li>
+                    <li onclick="selectEngine(this)" data-value="Mojeek">Mojeek</li>
+                    <li onclick="selectEngine(this)" data-value="Torry">Torry</li>
+                    <li onclick="selectEngine(this)" data-value="EntireWeb">EntireWeb</li>
                 </ul>
             </div>
             <button class="close-btn" onclick="closePopup()">Confirm Selection</button>
@@ -191,69 +248,109 @@ input[type="text"] {
     </div>
 
     <script>
-    const searchInput = document.getElementById('searchInput');
-    const loadingGif = document.getElementById('loadingGif');
-    const searchLogo = document.getElementById('searchLogo');
-    const popupModal = document.getElementById('popupModal');
+        const searchInput = document.getElementById('searchInput');
+        const loadingGif = document.getElementById('loadingGif');
+        const searchLogo = document.getElementById('searchLogo');
+        const popupModal = document.getElementById('popupModal');
+        const engineButton = document.getElementById('engineButton');
+        const historySection = document.getElementById('historySection');
 
-    // Function to open the modal popup
-    function openPopup() {
-        popupModal.style.display = 'flex';
-    }
+        let searchHistory = [];
 
-    // Function to close the modal popup
-    function closePopup() {
-        popupModal.style.display = 'none';
-    }
-
-    // Function to open the search URL or direct link
-    function openSearch() {
-        const inputText = searchInput.value || "👍"; // Default to 👍 if input is empty
-        const selectedEngine = document.querySelector('#list input[type="radio"]:checked');
-
-        // Check if the input contains a URL (http://, https:// or www.)
-        const urlPattern = /^(https?:\/\/|www\.)/;  // Added http:// to the regex
-        if (urlPattern.test(inputText)) {
-            // Open the input URL directly in a new tab
-            const url = inputText.startsWith('http') ? inputText : 'https://' + inputText;
-            window.open(url, '_blank');
-            return;
+        // Function to open the modal popup
+        function openPopup() {
+            popupModal.style.display = 'flex';
         }
 
-        if (!selectedEngine) {
-            alert('Please select a search engine.'); // Alert if no engine is selected
-            return;
+        // Function to close the modal popup
+        function closePopup() {
+            popupModal.style.display = 'none';
         }
 
-        const engineName = selectedEngine.value;
-        const engineUrls = {
-            "DuckDuckGo": `https://duckduckgo.com/?q=${encodeURIComponent(inputText)}`,
-            "SearX": `https://searx.org/search?q=${encodeURIComponent(inputText)}&language=all&time_range=&safesearch=0&theme=simple`,
-            "Gibiru": `https://gibiru.com/results.html?q=${encodeURIComponent(inputText)}`,
-            "Swisscows": `https://swisscows.com/en/web?query=${encodeURIComponent(inputText)}`,
-            "Becovi": `https://search.becovi.com/serp.php?q=${encodeURIComponent(inputText)}`,
-            "Ecosia": `https://www.ecosia.org/search?q=${encodeURIComponent(inputText)}`,
-            "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}`,
-            "Google": `https://www.google.com/search?q=${encodeURIComponent(inputText)}`,
-            "Bing": `https://www.bing.com/search?q=${encodeURIComponent(inputText)}`,
-            "Startpage": `https://www.startpage.com/do/search?query=${encodeURIComponent(inputText)}`,
-            "Privacia": `https://privacia.org/search?engine=1&q=${encodeURIComponent(inputText)}`,
-            "Mojeek": `https://www.mojeek.com/search?q=${encodeURIComponent(inputText)}`,
-            "Torry": `https://www.torry.io/search/?q=${encodeURIComponent(inputText)}`,
-            "EntireWeb": `https://search.entireweb.com/search?q=${encodeURIComponent(inputText)}`
-        };
+        // Function to select an engine
+        function selectEngine(element) {
+            const selectedEngine = document.querySelector('#list .selected');
+            if (selectedEngine) {
+                selectedEngine.classList.remove('selected');
+            }
+            element.classList.add('selected');
+            engineButton.innerText = element.dataset.value;
+        }
 
-        // Hide the search logo and show the loading GIF
-        searchLogo.style.display = 'none';
-        loadingGif.style.display = 'inline';
+        // Function to open the search URL based on the selected options
+        function openSearch() {
+            const inputText = searchInput.value || "👍"; // Default to 👍 if input is empty
+            const selectedEngine = document.querySelector('#list .selected');
+            if (!selectedEngine) {
+                alert('Please select a search engine.'); // Alert if no engine is selected
+                return;
+            }
 
-        // Open the selected search engine in a new tab
-        setTimeout(() => {
-            window.open(engineUrls[engineName], '_blank');
-            loadingGif.style.display = 'none';
-            searchLogo.style.display = 'inline';
-        }, 1000);
-    }
-</script>
+            const engineName = selectedEngine.dataset.value;
+            const engineUrls = {
+                "DuckDuckGo": `https://duckduckgo.com/?q=${encodeURIComponent(inputText)}`,
+                "SearX": `https://searx.org/search?q=${encodeURIComponent(inputText)}&language=all&time_range=&safesearch=0&theme=simple`,
+                "Gibiru": `https://gibiru.com/results.html?q=${encodeURIComponent(inputText)}`,
+                "Swisscows": `https://swisscows.com/en/web?query=${encodeURIComponent(inputText)}`,
+                "Becovi": `https://search.becovi.com/serp.php?q=${encodeURIComponent(inputText)}`,
+                "Ecosia": `https://www.ecosia.org/search?q=${encodeURIComponent(inputText)}`,
+                "Twitter": `https://x.com/search?q=${encodeURIComponent(inputText)}`,
+                "Google": `https://www.google.com/search?q=${encodeURIComponent(inputText)}`,
+                "Bing": `https://www.bing.com/search?q=${encodeURIComponent(inputText)}`,
+                "Startpage": `https://www.startpage.com/do/search?query=${encodeURIComponent(inputText)}`,
+                "Privacia": `https://privacia.org/search?engine=1&q=${encodeURIComponent(inputText)}`,
+                "Mojeek": `https://www.mojeek.com/search?q=${encodeURIComponent(inputText)}`,
+                "Torry": `https://www.torry.io/search/?q=${encodeURIComponent(inputText)}`,
+                "EntireWeb": `https://search.entireweb.com/search?q=${encodeURIComponent(inputText)}`
+            };
+
+            // Hide the search logo and show the loading GIF
+            searchLogo.style.display = 'none';
+            loadingGif.style.display = 'inline';
+
+            // Open the selected search engine in a new tab
+            setTimeout(() => {
+                window.open(engineUrls[engineName], '_blank');
+                loadingGif.style.display = 'none';
+                searchLogo.style.display = 'inline';
+            }, 1000);
+
+            // Save search history
+            searchHistory.push({ query: inputText, engine: engineName });
+            updateHistory();
+        }
+
+        // Update History section
+        function updateHistory() {
+            historySection.innerHTML = '';
+            if (searchHistory.length === 0) {
+                historySection.innerHTML = '<div class="history-item">No history yet.</div>';
+            } else {
+                searchHistory.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.classList.add('history-item');
+                    historyItem.innerHTML = `${item.query} on ${item.engine} <span class="copy-icon" onclick="copyHistoryText('${item.query}')">📋</span>`;
+                    historySection.appendChild(historyItem);
+                });
+            }
+        }
+
+        // Function to copy the history text
+        function copyHistoryText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Text copied to clipboard!");
+            });
+        }
+
+        // Function to display or hide the history section
+        function toggleHistory() {
+            const historySection = document.getElementById('historySection');
+            if (historySection.style.display === 'none') {
+                historySection.style.display = 'block';
+            } else {
+                historySection.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
